@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+
+  evaluation:
+    image: davidedomini99/evaluation
+    build: 
+      dockerfile: ./docker/evaluation/Dockerfile
+      context: .
+    volumes:
+      - .:/experiment:rw
+      - ./data:/experiment/data:rw
+
+  charts:
+    depends_on:
+      evaluation:
+        condition: service_completed_successfully
+    image: davidedomini99/plotter
+    build:
+      dockerfile: ./docker/charts/Dockerfile
+      context: .
+    volumes:
+      - ./data:/experiment/data:rw
+      - ./charts:/experiment/charts:rw

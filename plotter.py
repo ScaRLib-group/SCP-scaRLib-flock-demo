@@ -354,7 +354,8 @@ def runWith(count):
         all_data = data.copy()
         upper_bound[plot_label] = upper_bound[plot_label] - upper_bound['y-error']
         lower_bound[plot_label] = lower_bound[plot_label] - lower_bound['y-error']
-        reference = all_data.append(upper_bound).append(lower_bound).reset_index()
+        #reference = all_data.append(upper_bound).append(lower_bound).reset_index()
+        reference = pd.concat([all_data, upper_bound, lower_bound]).reset_index()
         to_plot = reference
         to_plot["legenda"] = label_for(labelA)
         data = pd.DataFrame({'time': means['time'], plot_label: means[labelB], "y-error": error[labelB]})
@@ -363,9 +364,11 @@ def runWith(count):
         all_data = data.copy()
         upper_bound[plot_label] = upper_bound[plot_label] - upper_bound['y-error']
         lower_bound[plot_label] = lower_bound[plot_label] - lower_bound['y-error']
-        reference = all_data.append(upper_bound).append(lower_bound).reset_index()
+        #reference = all_data.append(upper_bound).append(lower_bound).reset_index()
+        reference = pd.concat([all_data, upper_bound, lower_bound]).reset_index()
         reference["legenda"] = label_for(labelB)
-        to_plot = to_plot.append(reference).reset_index()
+        #to_plot = to_plot.append(reference).reset_index()
+        to_plot = pd.concat([to_plot, reference]).reset_index()
         print(reference)
         return sns.lineplot(x='time', y=plot_label, data=to_plot, hue="legenda")
 

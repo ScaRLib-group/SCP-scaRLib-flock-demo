@@ -32,7 +32,7 @@ object CohesionCollisionEval extends App {
       implicit val configuration: Environment => Unit = (e: Environment) => {
         val env = e.asInstanceOf[AlchemistEnvironment]
         env.setOutputStrategy(show)
-        env.setRandomSeed(Some(42))
+        env.setRandomSeed(Some(seed))
         env.setEnvironmentDefinition(s"./src/main/scala/experiments/cohesioncollision/evaluation/CohesionAndCollisionEval-${count}.yaml")
       }
 
@@ -53,7 +53,7 @@ object CohesionCollisionEval extends App {
   }
 
   runEvaluationWith(50)
-  runEvaluationWith(100)
+  runEvaluationWith(98)
   runEvaluationWith(200)
   System.exit(0)
 }

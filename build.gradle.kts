@@ -40,20 +40,20 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.4.5")
 }
 
-val experiments = listOf("CohesionCollision", "FollowTheLeader")
+val experiments = listOf("CohesionCollision")
 
 for(experiment in experiments){
     tasks.register<JavaExec>("run${experiment}Training") {
         group = "ScaRLib $experiment Training"
         mainClass.set("experiments.${experiment.toLowerCase()}.training.${experiment}Training")
-        jvmArgs("-Dsun.java2d.opengl=false")
+        jvmArgs("-Dsun.java2d.opengl=false", "-Dscalapy.python.library=python3.11")
         classpath = sourceSets["main"].runtimeClasspath
     }
 
     tasks.register<JavaExec>("run${experiment}TrainingGui") {
         group = "ScaRLib $experiment Training"
         mainClass.set("experiments.${experiment.toLowerCase()}.training.${experiment}Training")
-        jvmArgs("-Dsun.java2d.opengl=false")
+        jvmArgs("-Dsun.java2d.opengl=false", "-Dscalapy.python.library=python3.11")
         args = listOf("20")
         classpath = sourceSets["main"].runtimeClasspath
     }
@@ -61,6 +61,7 @@ for(experiment in experiments){
     tasks.register<JavaExec>("run${experiment}Eval") {
         group = "ScaRLib $experiment Training"
         mainClass.set("experiments.${experiment.toLowerCase()}.evaluation.${experiment}Eval")
+        //jvmArgs("-Dsun.java2d.opengl=false", "-Dscalapy.python.library=python3.11")
         jvmArgs("-Dsun.java2d.opengl=false")
         classpath = sourceSets["main"].runtimeClasspath
     }
@@ -68,7 +69,7 @@ for(experiment in experiments){
     tasks.register<JavaExec>("run${experiment}EvalGui") {
         group = "ScaRLib $experiment Training"
         mainClass.set("experiments.${experiment.toLowerCase()}.evaluation.${experiment}Eval")
-        jvmArgs("-Dsun.java2d.opengl=false")
+        jvmArgs("-Dsun.java2d.opengl=false", "-Dscalapy.python.library=python3.11")
         args = listOf("20")
         classpath = sourceSets["main"].runtimeClasspath
     }
@@ -77,7 +78,7 @@ for(experiment in experiments){
 tasks.register<JavaExec>("runSmokeTest") {
     group = "ScaRLib Training"
     mainClass.set("experiments.cohesioncollision.evaluation.SmokeTest")
-    jvmArgs("-Dsun.java2d.opengl=false")
+    jvmArgs("-Dsun.java2d.opengl=false", "-Dscalapy.python.library=python3.11")
     args = listOf("20")
     classpath = sourceSets["main"].runtimeClasspath
 }
