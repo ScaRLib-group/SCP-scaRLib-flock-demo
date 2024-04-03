@@ -22,7 +22,39 @@ All the files needed to describe the experiment are in the `src/main/scala/exper
 
 Finally, all these elements are merged to create the learning system in the file `CohesionCollisionTraining.scala`.
 
-## Preliminaries 
+## Run via Docker
+Since configuring ScalaPy may not be straightforward on all operating systems, we have integrated the possibility of executing the experiments through Docker using docker compose.
+
+### Docker project structure
+- `docker-compose.yml`: this file describes the docker services required to reproduce the experiment, in particular, there are three services:
+  - `learning`: performs the learning from scratch
+  - `evaluation`: performs the evaluation using a pre-trained neural network
+  - `charts`: generates all the charts
+- `docker/`: this folder contains all the Dockerfiles needed by docker compose
+
+**N.B.** Since learning from scratch may take a long time on certain systems with low resources (e.g., without a GPU) we provided a pre-trained neural network (`networks/network`) which can be used to perform the evaluation and reproduce the charts presented in the paper. 
+Furthermore, we have also included the data extracted from the evaluation phase, so it is also possible to perform only the generation of the charts.
+
+### How to launch the experiment
+
+- Learning: 
+  ```shell
+  docker compose run --no-deps learning
+  ``` 
+- Evaluation:
+  ```shell
+  docker compose run --no-deps evaluation
+  ```
+- Charts
+  ```shell
+  docker compose run --no-deps charts
+  ```
+
+**N.B** By default the evaluation uses the pre-trained neural network. If you want to use a network trained from scratch, it is necessary to change the snapshot path in the file `evaluation/CohesionCollisionEval.scala`
+
+## Run locally
+
+### Preliminaries 
 
 Due to the usage of ScalaPy there might be the need for some extra-configuration, all the details can be found [here](https://scalapy.dev/docs/) (sections: `Execution` and `Virtualenv`). Tip: if if you don't want to configure environment variables on your PC you can pass the required arguments directly to the gradle task adding the following code (in `build.gradle.kts` file):
 ```kotlin
@@ -36,7 +68,7 @@ Before running the learning you must install the following dependencies:
 pip install -r requirements.txt
 ```
 
-## How to use it 
+### How to use it 
 
 In order to launch the learning only one change is needed, you must specify the path on where the snapshots of the policy will be saved. You can do this editing the following line of code in the file `CohesionCollisionTraining.scala`:
 ```scala
