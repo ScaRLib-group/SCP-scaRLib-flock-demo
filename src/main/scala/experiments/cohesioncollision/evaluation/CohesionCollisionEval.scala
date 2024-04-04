@@ -13,7 +13,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import experiments.cohesioncollision.CohesionCollisionState.encoding
 import it.unibo.scarlib.core.neuralnetwork.NeuralNetworkSnapshot
 
+import java.nio.file.{Files, Paths}
+
 object CohesionCollisionEval extends App {
+  def measure(eval: => Unit): Long = {
+    val start = System.currentTimeMillis()
+    eval
+    System.currentTimeMillis() - start
+  }
 
   val argsMap = args.zipWithIndex.map { case (arg, i) => (i, arg) }.toMap
   val show = argsMap.get(0) match {
@@ -51,9 +58,15 @@ object CohesionCollisionEval extends App {
         .runTest(ExperimentInfo.episodeLength, NeuralNetworkSnapshot(where, StateInfo.encoding * StateInfo.neighborhood, ExperimentInfo.hiddenSize))
     }
   }
-
-  runEvaluationWith(50)
-  runEvaluationWith(98)
-  runEvaluationWith(200)
+  val simulations = List(50, 98, 162, 200, 242, 288, 338, 392, 968)
+  val measuredEvaluationTime = simulations.to(LazyList).map { case count => measure { runEvaluationWith(count) } }.tapEach(time => println("Measured time: " + time))
+  // create a csv from the measured times
+  val csv = simulations.zip(measuredEvaluationTime).map { case (count, time) => s"${count},${time}" }.mkString("\n")
+  println("Final result:")
+  println(csv)
+  // add a first line with the headers
+  val csvHeaders = "agents,time\n" + csv
+  // store the csv in a file in data/performance.csv in one line
+  Files.write(Paths.get("data/performance.csv"), csvHeaders.getBytes())
   System.exit(0)
 }
