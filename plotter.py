@@ -369,7 +369,7 @@ def runWith(count):
         reference["legenda"] = label_for(labelB)
         #to_plot = to_plot.append(reference).reset_index()
         to_plot = pd.concat([to_plot, reference]).reset_index()
-        print(reference)
+        #print(reference)
         return sns.lineplot(x='time', y=plot_label, data=to_plot, hue="legenda")
 
     def finalise_fig(ax, name):
@@ -396,6 +396,7 @@ def runWith(count):
     #ax = produce_chart(current_experiment_means, current_experiment_errors, "avgDistanceTeam[mean]", palette[2:])
     #finalise_fig(ax, "average_intra_team_distance")
 # Custom charting
-runWith(50)
-runWith(100)
-runWith(200)
+experiments = [50, 100, 200]
+for experiment in experiments:
+    print(f"Plotting flocking performance ({experiment} agents)")
+    runWith(experiment)
