@@ -58,7 +58,7 @@ object CohesionCollisionEval extends App {
         .runTest(ExperimentInfo.episodeLength, NeuralNetworkSnapshot(where, StateInfo.encoding * StateInfo.neighborhood, ExperimentInfo.hiddenSize))
     }
   }
-  val simulations = List(50, 98, 162, 200, 242, 288, 338, 392, 968)
+  val simulations = List(50, 98, 162, 200, 242, 288, 338, 392)
   val measuredEvaluationTime = simulations.to(LazyList).map { case count => measure { runEvaluationWith(count) } }.tapEach(time => println("Measured time: " + time))
   // create a csv from the measured times
   val csv = simulations.zip(measuredEvaluationTime).map { case (count, time) => s"${count},${time}" }.mkString("\n")
